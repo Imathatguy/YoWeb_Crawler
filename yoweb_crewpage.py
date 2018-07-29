@@ -17,11 +17,11 @@ TODO: - loop over specified time delay
 TODO: - plotting of statistics over time.
 """
 import pandas as pd
+from datetime import datetime
+import time
+import csv
 
-if __name__ == '__main__':
-    # crew_id = 5001832  # Consider it Drunk
-    crew_id = 5000435  # The Southsea Bandits
-
+def retrieve_crew_info(crew_id):
     url = (
         r'http://obsidian.puzzlepirates.com/yoweb/crew/info.wm'
         r'?crewid=%s&classic=false' % crew_id
@@ -57,5 +57,46 @@ if __name__ == '__main__':
         for user in row.dropna().values:
             jobber_list_dict[rank].append(user)
 
-    print jobber_list_dict
-    print total_numbers_dict
+    return jobber_list_dict, total_numbers_dict
+
+
+if __name__ == '__main__':
+    # crew_id = 5001832  # Consider it Drunk
+    # crew_id = 5000435  # The Southsea Bandits
+    # crew_id = 5001990  # The Organization
+    n = 0
+    while True:
+
+        now_time = datetime.utcnow().strftime('%d/%m/%y-%H:%M:%S')
+
+        with open("bandits_job.csv", "ab") as crew_file:
+            writer = csv.writer(crew_file, delimiter=',', quotechar="\"",
+                                quoting=csv.QUOTE_NONNUMERIC)
+            job_list, tot_num = retrieve_crew_info(5000435)
+            line = [now_time, n]
+            line.append(tot_num.get("Jobbing Pirate", 0))
+            line.extend(job_list.get("Jobbing Pirate", ""))
+            writer.writerow(line)
+
+        with open("CIS_job.csv", "ab") as crew_file:
+            writer = csv.writer(crew_file, delimiter=',', quotechar="\"",
+                                quoting=csv.QUOTE_NONNUMERIC)
+            job_list, tot_num = retrieve_crew_info(5001832)
+            line = [now_time, n]
+            line.append(tot_num.get("Jobbing Pirate", 0))
+            line.extend(job_list.get("Jobbing Pirate", ""))
+            writer.writerow(line)
+
+        with open("GW_job.csv", "ab") as crew_file:
+            writer = csv.writer(crew_file, delimiter=',', quotechar="\"",
+                                quoting=csv.QUOTE_NONNUMERIC)
+            job_list, tot_num = retrieve_crew_info(5001990)
+            line = [now_time, n]
+            line.append(tot_num.get("Jobbing Pirate", 0))
+            line.extend(job_list.get("Jobbing Pirate", ""))
+            writer.writerow(line)
+
+        sleeptime = 60 - datetime.utcnow().second
+        time.sleep(sleeptime)
+
+        n += 1
