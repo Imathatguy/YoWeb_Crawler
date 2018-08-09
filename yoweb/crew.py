@@ -76,8 +76,10 @@ class CrewMembers(object):
         self._data.drop(self._data.columns[3], axis=1, inplace=True)
         member_dfs = np.split(self._data, self._data[self._data.isnull().all(1)].index)
 
-        for member_df in member_dfs[:-1]:
+        for member_df in member_dfs:
             member_df.dropna(how='all', inplace=True)
+            if member_df.empty:
+                continue
             title = str(member_df[1][member_df.index.values[1]]).lower().replace(' ', '_')
             member_df.drop(member_df.index[:2], inplace=True)
             members = [self._oceanobj.getpirate(column) for index, row in

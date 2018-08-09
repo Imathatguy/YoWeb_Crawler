@@ -12,11 +12,14 @@ from yoweb import base
 
 
 if __name__ == '__main__':
-    tracker_list = {5001832: ("Consider it Drunk", "CiD"),
+    tracker_list = {#5001832: ("Consider it Drunk", "CiD"),
                     5000435: ("The Southsea Bandits", "TSB"),
-                    5001990: ("The Organization", "TO")}
+                    5001229: ("Elysium", "ELSM"),
+                    5001155: ("Inglorious Basterds", "IB"),
+                    #5001990: ("The Organization", "TO")
+                    }
 
-    destination = "./MEL_IV/"
+    destination = "./TEST_RUN/"
     if not os.path.exists(destination):
         os.makedirs(destination)
 
@@ -43,15 +46,12 @@ if __name__ == '__main__':
                     line.append(0)
                 # Jobber List
                 try:
-                    line.extend(crew_base.members.jobbing_pirate)
+                    line.extend([a.name for a in crew_base.members.jobbing_pirate])
                 except:
                     pass
                     
                 writer.writerow(line)
 
-        #sleeptime = 60 - datetime.utcnow().second
-        #time.sleep(sleeptime)
-
+        sleeptime = 60 - datetime.utcnow().second
+        time.sleep(sleeptime)
         n += 1
-        
-        break
