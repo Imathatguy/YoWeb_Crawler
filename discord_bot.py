@@ -28,21 +28,23 @@ bot_channel_id = 477596596863762443
 
 tracker_list = {
                 5001832: ("Consider it Drunk", "CiS"),
-                5001162: ("Untameable", "LB"),
-                5001968: ("Pokemon", "CtA"),
-                5002158: ("Ship Faced", "PO"),
-                5002112: ("Throwing Ape Ship", "APE"),
-                5000200: ("The Midnight Society", "BRENDA"),
-                #5001156: ("Oath of Peace", "KtP"),
+                # 5001204: ("Thinking Face", "AH"),
+                # 5001162: ("Untameable", "LB"),
+                # 5001968: ("Pokemon", "CtA"),
+                # 5002158: ("Ship Faced", "PO"),
+                # 5002112: ("Throwing Ape Ship", "APE"),
+                # 5000200: ("The Midnight Society", "BRENDA"),
+                # 5001156: ("Oath of Peace", "KtP"),
                 # 5000435: ("The Southsea Bandits", "TSB"),
                 # 5001229: ("Elysium", "ELSM"),
                 # 5001155: ("Inglorious Basterds", "IB"),
-                #5001990: ("The Organization", "GW")
+                5001990: ("The Organization", "GW"),
+                # 5001699: ("TBA", "BRENDA"),
                 }
 
-destination = "./MEL_TRIPLEDROP/"
+destination = "./MEL_X/"
 
-n_data_points = 200
+n_data_points = 150
 
 if not os.path.exists(destination):
     os.makedirs(destination)
