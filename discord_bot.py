@@ -23,18 +23,28 @@ number_channel_id = 475656157130915851
 list_channel_id = 475656194120220672
 # jobber graphs
 graph_channel_id = 475656217449201664
+# Bot command and Message
+bot_channel_id = 477596596863762443
 
 tracker_list = {
-                #5001832: ("Consider it Drunk", "CiD"),
-                5000435: ("The Southsea Bandits", "TSB"),
-                5001229: ("Elysium", "ELSM"),
-                5001155: ("Inglorious Basterds", "IB"),
-                #5001990: ("The Organization", "TO")}
+                5001832: ("Consider it Drunk", "CiS"),
+                # 5001204: ("Thinking Face", "AH"),
+                # 5001162: ("Untameable", "LB"),
+                # 5001968: ("Pokemon", "CtA"),
+                # 5002158: ("Ship Faced", "PO"),
+                # 5002112: ("Throwing Ape Ship", "APE"),
+                # 5000200: ("The Midnight Society", "BRENDA"),
+                # 5001156: ("Oath of Peace", "KtP"),
+                # 5000435: ("The Southsea Bandits", "TSB"),
+                # 5001229: ("Elysium", "ELSM"),
+                # 5001155: ("Inglorious Basterds", "IB"),
+                5001990: ("The Organization", "GW"),
+                # 5001699: ("TBA", "BRENDA"),
                 }
 
-destination = "./TEST_RUN/"
+destination = "./MEL_X/"
 
-n_data_points = 500
+n_data_points = 150
 
 if not os.path.exists(destination):
     os.makedirs(destination)
@@ -72,7 +82,8 @@ async def cade_data_function():
 
         plt.figure()
         for crew, data in record_holder.items():
-            plt.plot(index[-n_data_points:], data[-n_data_points:], label=crew)
+            label = "%s - %i"%(crew, jobber_holder[crew])
+            plt.plot(index[-n_data_points:], data[-n_data_points:], label=label)
         
         plt.legend()
         plt.title(destination.split('/')[1])
@@ -82,11 +93,11 @@ async def cade_data_function():
         plt.savefig("%splot.png" % destination)
         plt.close('all')
         
-        await client.send_message(num_channel, now_time)
-        await client.send_message(num_channel, number_holder)
+        # await client.send_message(num_channel, now_time)
+        # await client.send_message(num_channel, number_holder)
 
-        await client.send_message(list_channel, now_time)
-        await client.send_message(list_channel, jobber_holder)
+        # await client.send_message(list_channel, now_time)
+        # await client.send_message(list_channel, jobber_holder)
 
         await client.send_message(graph_channel, now_time)
         await client.send_file(graph_channel, "%splot.png" % destination)
@@ -101,6 +112,28 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    bot_channel = discord.Object(id=str(bot_channel_id))
+    await client.send_message(bot_channel, "Ready")
+
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    bot_channel = discord.Object(id=str(bot_channel_id))
+
+    if message.content.startswith('!hello'):
+        bot_channel = discord.Object(id=str(bot_channel_id))
+        await client.send_message(bot_channel, "Hello")
+
+
+    if message.content.startswith('!reset'):
+        await client.send_message(bot_channel, "Restarting...")
+        force_shutdown()
+
+
+def force_shutdown():
+    raise SystemExit
 
 
 def handle_exit():
@@ -137,7 +170,9 @@ while True:
     try:
         client.loop.run_until_complete(client.start(token))
     except SystemExit:
+        print('SystemExit')
         handle_exit()
+        break
     except KeyboardInterrupt:
         handle_exit()
         client.loop.close()
